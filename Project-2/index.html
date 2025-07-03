@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Gallery</title>
+  <style>
+    body{
+      background: rgb(172, 156, 156);
+    }
+
+    .totalcontainer{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 98vh;
+    }
+
+    .imgcontainer{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .imgcontainer img{
+      margin: 10px 10px;
+      box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox{
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+    }
+
+    .lightboximg{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 500px;
+    }
+
+    .closebtn{
+      position: absolute;
+      top: 100px;
+      right: 150px;
+      font-weight:600 ;
+      font-size: 40px;
+      color: aliceblue;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .prevbtn{
+      position: absolute;
+      top: 50%;
+      left: 100px;
+      width: 50px;
+      height: 50px;
+      font-size: 30px;
+      color: black;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 50%;
+      border: none;
+    }
+
+    .nextbtn{
+      position: absolute;
+      top: 50%;
+      right: 100px;
+      width: 50px;
+      height: 50px;
+      font-size: 30px;
+      color: black;
+      cursor: pointer;
+      user-select: none;
+      border: none;
+      border-radius: 50%;
+    }
+    @media (max-width:1200px){
+      .lightboximg{
+        width: 500px;
+        object-fit:contain;
+      }
+    }
+
+    @media (max-width:992px){
+      .imgcontainer{
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .closebtn{
+        position: fixed;
+        right: 100px;
+      }
+
+      .lightbox img{
+        width: 400px;
+        object-fit: contain;
+      }
+    }
+
+    @media (max-width:720px){
+      .lightbox img{
+        width: 300px;
+        object-fit: contain;
+      }   
+      
+      .imgcontainer{
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="totalcontainer">
+    <div class="imgcontainer">
+      <img src="/images/img-1.jpeg" alt="img1" style="width: 300px; height: 180px;">
+      <img src="/images/img-2.jpeg" alt="img2" style="width: 300px; height: 180px;">
+      <img src="/images/img-3.jpeg" alt="img3" style="width: 300px; height: 180px;">
+      <img src="/images/img-4.jpeg" alt="img4" style="width: 300px; height: 180px;">
+      <img src="/images/img-5.jpeg" alt="img5" style="width: 300px; height: 180px;">
+      <img src="/images/img-6.jpeg" alt="img6" style="width: 300px; height: 180px;">
+    </div>
+
+    <div class="lightbox" id="lightbox">
+      <span class="closebtn">&times;</span>
+
+      <img class="lightboximg" id="lightboximg" src="">
+
+      <button class="prevbtn" id="prevbtn">&#10094;</button>
+      <button class="nextbtn" id="nextbtn">&#10095;</button>
+    </div>
+  </div>
+
+  <script>
+    let display=document.querySelectorAll(".imgcontainer img");
+    let lightbox=document.getElementById('lightbox');
+    let lightboximg=document.getElementById('lightboximg');
+    let closebtn=document.querySelector('.lightbox span');
+    let prevbtn=document.getElementById('prevbtn');
+    let nextbtn=document.getElementById('nextbtn');
+
+    let currentindex=0;
+
+    function showimage(index){
+      lightboximg.src=display[index].src;
+      lightbox.style.display="block";
+      currentindex=index;
+    }
+
+    display.forEach((img,index)=>{
+      img.addEventListener("click" ,()=>{
+        showimage(index)
+      })
+    })
+
+    closebtn.addEventListener("click" ,()=>{
+      lightbox.style.display="none";
+    })
+
+    prevbtn.addEventListener("click" ,()=>{
+      currentindex=(currentindex-1+display.length)%display.length;
+      showimage(currentindex);
+    })
+
+    nextbtn.addEventListener("click" ,()=>{
+      currentindex=(currentindex+1)%display.length;
+      showimage(currentindex);
+    })  
+  </script>
+</body>
+</html>
